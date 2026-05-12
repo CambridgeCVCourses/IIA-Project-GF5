@@ -1,0 +1,117 @@
+<!doctype html>
+<!-- Generated from interim.md by docs/build_site.py. Do not edit by hand. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Interim Report | GF5: Animating 3D Characters</title>
+    <link rel="stylesheet" href="assets/site.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="nav-shell">
+        <a class="brand" href="index.html" aria-label="GF5 home">
+          <span class="brand-mark">GF5</span>
+          <span>GF5: Animating 3D Characters</span>
+        </a>
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="index.html">Overview</a>
+          <a href="setup.html">Setup</a>
+          <a href="part1.html">Part 1</a>
+          <a href="part2.html">Part 2</a>
+          <a href="interim.html" aria-current="page">Interim</a>
+          <a href="part3.html">Part 3</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="page doc-page">
+      <section class="doc-hero">
+        <div>
+          <p class="eyebrow">Checkpoint</p>
+          <h1>Interim Report</h1>
+          <div class="actions">
+            <a class="button" href="part2.html">Previous: Part 2</a>
+            <a class="button primary" href="part3.html">Next: Part 3</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="doc-shell">
+        <aside class="doc-toc" aria-label="On this page">
+          <strong>On this page</strong>
+            <a href="#recommended-length">Recommended Length</a>
+            <a href="#what-to-submit">What To Submit</a>
+            <a href="#report-structure">Report Structure</a>
+            <a href="#required-figures-and-media">Required Figures and Media</a>
+        </aside>
+        <article class="doc-content">
+          <p>The interim report is the main checkpoint after Part 2.</p>
+          <p>The goal is not to reward code volume. The goal is to show that you understand the pipeline and can produce and interpret results from your own code.</p>
+          <h2 id="recommended-length">Recommended Length</h2>
+          <ul>
+            <li>up to <code>5</code> pages of main report content</li>
+            <li>use <code>11 pt</code> main text</li>
+            <li>use single line spacing</li>
+            <li>figures and tables included in that limit</li>
+            <li>short appendix only if necessary</li>
+          </ul>
+          <h2 id="what-to-submit">What To Submit</h2>
+          <ul class="checklist">
+            <li>your code</li>
+            <li>your saved custom motion clip</li>
+            <li>a short video of the toy-rig motion</li>
+            <li>a short video of the same motion on SMPL</li>
+            <li>one-hot versus LBS comparison figures</li>
+            <li>the interim report PDF</li>
+          </ul>
+          <p>Code and videos are required parts of the interim submission, not optional supporting material.</p>
+          <h2 id="report-structure">Report Structure</h2>
+          <p>Use these section headings in your report:</p>
+          <ol>
+            <li><code>Skeleton and Hierarchy</code> Explain what information is stored for each joint and how the parent-child relationships are represented.</li>
+          </ol>
+          <ol start="2">
+            <li><code>Forward Kinematics</code> State the FK recurrence you implemented using equations, and explain how your code handles the joint hierarchy.</li>
+          </ol>
+          <ol start="3">
+            <li><code>Custom Motion</code> Describe your motion, state how many keyframes you used, and explain why it is a useful test case for skinning.</li>
+          </ol>
+          <ol start="4">
+            <li><code>One-Hot Skinning</code> Explain exactly how you converted the SMPL weight matrix into one-hot weights, and write down the mathematical rule you used.</li>
+          </ol>
+          <ol start="5">
+            <li><code>Comparison with LBS</code> Compare one-hot SMPL against LBS using the same motion, discuss the main visual differences, and write down the LBS equation used for a posed vertex.</li>
+          </ol>
+          <ol start="6">
+            <li><code>Weight Visualisation</code> Interpret at least two selected-joint weight visualisations.</li>
+          </ol>
+          <ol start="7">
+            <li><code>Debugging Notes</code> Include at least one Part-1 debugging note and one Part-2 debugging note.</li>
+          </ol>
+          <ol start="8">
+            <li><code>AI Use Statement</code> State either <code>No AI tools used</code>, or describe any limited non-substantive use such as spelling checks or environment/setup help.</li>
+          </ol>
+          <h2 id="required-figures-and-media">Required Figures and Media</h2>
+          <p>Your submission should include all of the following evidence:</p>
+          <ul class="checklist">
+            <li>your code</li>
+            <li>one short video of your custom motion on the toy rig</li>
+            <li>one short video of the same motion on SMPL</li>
+            <li>in the PDF: one screenshot of the rigid skeleton or kinematic chain</li>
+            <li>in the PDF: at least two one-hot versus LBS comparison images</li>
+            <li>in the PDF: at least two selected-joint weight visualisations</li>
+          </ul>
+          <p>The videos should be submitted as separate files. The PDF should use still figures only where they help explain the method or compare deformation artifacts.</p>
+        </article>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        Generated from Markdown source: <a href="https://github.com/CambridgeCVCourses/IIA-Project-GF5/blob/main/docs/interim.md">interim.md</a>.
+      </div>
+    </footer>
+  </body>
+</html>

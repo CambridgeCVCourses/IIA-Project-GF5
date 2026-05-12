@@ -1,0 +1,102 @@
+<!doctype html>
+<!-- Generated from setup.md by docs/build_site.py. Do not edit by hand. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Setup and Viewer Guide | GF5: Animating 3D Characters</title>
+    <link rel="stylesheet" href="assets/site.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="nav-shell">
+        <a class="brand" href="index.html" aria-label="GF5 home">
+          <span class="brand-mark">GF5</span>
+          <span>GF5: Animating 3D Characters</span>
+        </a>
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="index.html">Overview</a>
+          <a href="setup.html" aria-current="page">Setup</a>
+          <a href="part1.html">Part 1</a>
+          <a href="part2.html">Part 2</a>
+          <a href="interim.html">Interim</a>
+          <a href="part3.html">Part 3</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="page doc-page">
+      <section class="doc-hero">
+        <div>
+          <p class="eyebrow">Before coding</p>
+          <h1>Setup and Viewer Guide</h1>
+          <div class="actions">
+            <a class="button" href="index.html">Previous: Overview</a>
+            <a class="button primary" href="part1.html">Next: Part 1</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="doc-shell">
+        <aside class="doc-toc" aria-label="On this page">
+          <strong>On this page</strong>
+            <a href="#create-the-environment">Create The Environment</a>
+            <a href="#run-the-viewer">Run The Viewer</a>
+            <a href="#files-you-will-edit">Files You Will Edit</a>
+            <a href="#main-viewer-controls">Main Viewer Controls</a>
+            <a href="#smpl-model-files">SMPL Model Files</a>
+            <a href="#next-step">Next Step</a>
+        </aside>
+        <article class="doc-content">
+          <p>The project uses a local Python viewer for skeleton inspection, pose editing, skinning-weight visualisation, and video export.</p>
+          <h2 id="create-the-environment">Create The Environment</h2>
+          <p>From the repository root, create and activate the course environment once:</p>
+          <pre><code class="language-bash">mamba env create -f env.yml
+          mamba activate gf5</code></pre>
+          <h2 id="run-the-viewer">Run The Viewer</h2>
+          <p>Start the local viewer from the repository root:</p>
+          <pre><code class="language-bash">python viewer/asset_viewer.py</code></pre>
+          <p>If the default port is already in use, choose another port:</p>
+          <pre><code class="language-bash">python viewer/asset_viewer.py --port 8090</code></pre>
+          <p>For a remote or headless session, suppress automatic browser opening:</p>
+          <pre><code class="language-bash">python viewer/asset_viewer.py --no-open-browser</code></pre>
+          <p>Then open the printed <code>localhost</code> URL in a browser.</p>
+          <h2 id="files-you-will-edit">Files You Will Edit</h2>
+          <p>For Part 1, implement forward kinematics in:</p>
+          <pre><code class="language-text">viewer/student_submission/part1_fk.py</code></pre>
+          <p>For Part 2, implement one-hot and LBS skinning in:</p>
+          <pre><code class="language-text">viewer/student_submission/part2_skinning.py</code></pre>
+          <p>You will also use these files to understand how data flows through the viewer:</p>
+          <ul>
+            <li><code>viewer/asset_viewer.py</code></li>
+            <li><code>viewer/motion_sequences.py</code></li>
+            <li><code>viewer/smpl_support.py</code></li>
+            <li><code>viewer/skeleton_profiles.py</code></li>
+          </ul>
+          <h2 id="main-viewer-controls">Main Viewer Controls</h2>
+          <ul>
+            <li><code>Motion</code> and <code>Animate</code>: choose and play a built-in or saved motion clip.</li>
+            <li><code>Show Skeleton</code> and <code>Show Mesh</code>: inspect the rig and visible character surface.</li>
+            <li><code>Selected Joint</code> and <code>Joint Editor</code>: rotate individual joints and debug the hierarchy.</li>
+            <li><code>Timeline</code>: capture keyframes for the custom Part 1 motion.</li>
+            <li><code>Export Motion Video</code>: render evidence videos for the interim submission.</li>
+          </ul>
+          <h2 id="smpl-model-files">SMPL Model Files</h2>
+          <p>SMPL model files are not included in the repository. If you have access to them, place them under:</p>
+          <pre><code class="language-text">assets/smpl/models/</code></pre>
+          <p>or start the viewer with an explicit model path:</p>
+          <pre><code class="language-bash">python viewer/asset_viewer.py --smpl-model /path/to/smpl/model.pkl</code></pre>
+          <h2 id="next-step">Next Step</h2>
+          <p>Once the viewer runs, continue to <a href="part1.html">Part 1</a>.</p>
+        </article>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        Generated from Markdown source: <a href="https://github.com/CambridgeCVCourses/IIA-Project-GF5/blob/main/docs/setup.md">setup.md</a>.
+      </div>
+    </footer>
+  </body>
+</html>

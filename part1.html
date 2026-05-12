@@ -1,0 +1,207 @@
+<!doctype html>
+<!-- Generated from part1.md by docs/build_site.py. Do not edit by hand. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Part 1: Kinematic Chains and Forward Kinematics | GF5: Animating 3D Characters</title>
+    <link rel="stylesheet" href="assets/site.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="nav-shell">
+        <a class="brand" href="index.html" aria-label="GF5 home">
+          <span class="brand-mark">GF5</span>
+          <span>GF5: Animating 3D Characters</span>
+        </a>
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="index.html">Overview</a>
+          <a href="setup.html">Setup</a>
+          <a href="part1.html" aria-current="page">Part 1</a>
+          <a href="part2.html">Part 2</a>
+          <a href="interim.html">Interim</a>
+          <a href="part3.html">Part 3</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="page doc-page">
+      <section class="doc-hero">
+        <div>
+          <p class="eyebrow">Part 1</p>
+          <h1>Part 1: Kinematic Chains and Forward Kinematics</h1>
+          <div class="actions">
+            <a class="button" href="setup.html">Previous: Setup</a>
+            <a class="button primary" href="part2.html">Next: Part 2</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="doc-shell">
+        <aside class="doc-toc" aria-label="On this page">
+          <strong>On this page</strong>
+            <a href="#why-this-part-matters">Why This Part Matters</a>
+            <a href="#learning-goals">Learning Goals</a>
+            <a href="#minimal-technical-background">Minimal Technical Background</a>
+            <a href="#code-map">Code Map</a>
+            <a href="#part-1-tasks">Part 1 Tasks</a>
+            <a href="#what-to-bring-to-help-sessions">What To Bring To Help Sessions</a>
+            <a href="#part-1-output">Part 1 Output</a>
+        </aside>
+        <article class="doc-content">
+          <h2 id="why-this-part-matters">Why This Part Matters</h2>
+          <p>The first useful abstraction in character animation is not a mesh. It is a tree of joints.</p>
+          <p>If we can describe a character as a root joint with children, and each joint stores a local transform relative to its parent, then we can pose the whole character by propagating transformations through the tree. That is forward kinematics (FK).</p>
+          <p>This part uses a deliberately simple block character so that you can see the hierarchy clearly and debug the motion without worrying about smooth mesh deformation yet.</p>
+          <h2 id="learning-goals">Learning Goals</h2>
+          <p>By the end of Part 1, you should be able to:</p>
+          <ul class="checklist">
+            <li>explain what a joint hierarchy or kinematic chain is</li>
+            <li>distinguish local coordinates from world coordinates</li>
+            <li>compute world-space joint rotations and positions from local transforms</li>
+            <li>debug a broken articulated character by checking parent-child relationships</li>
+            <li>create a short custom motion by placing key poses on a timeline</li>
+          </ul>
+          <h2 id="minimal-technical-background">Minimal Technical Background</h2>
+          <h3 id="coordinate-convention">Coordinate Convention</h3>
+          <p>In the viewer used for this project:</p>
+          <ul>
+            <li><code>+z</code> is up</li>
+            <li><code>+y</code> is the character's forward direction</li>
+          </ul>
+          <p>You do not need prior graphics experience, but you do need to be comfortable with vectors, matrices, and matrix multiplication order.</p>
+          <h3 id="skeleton-data">Skeleton Data</h3>
+          <p>For each joint, the asset stores:</p>
+          <ul>
+            <li>a joint name</li>
+            <li>a parent index</li>
+            <li>a local translation from the parent joint to the child joint in the rest pose</li>
+          </ul>
+          <p>For each pose, we also need:</p>
+          <ul>
+            <li>a local rotation for each joint</li>
+            <li>a root translation offset for the whole character</li>
+          </ul>
+          <h3 id="forward-kinematics">Forward Kinematics</h3>
+          <p>Let joint <code>i</code> have parent <code>p(i)</code>.</p>
+          <p>For the root:</p>
+          <pre><code class="language-text">R_world(root) = R_local(root)
+          p_world(root) = t_root + root_offset</code></pre>
+          <p>For a non-root joint:</p>
+          <pre><code class="language-text">R_world(i) = R_world(p(i)) R_local(i)
+          p_world(i) = p_world(p(i)) + R_world(p(i)) t_local(i)</code></pre>
+          <p>This recurrence is the core implementation task for Part 1.</p>
+          <h2 id="code-map">Code Map</h2>
+          <p>Start with these files:</p>
+          <ul>
+            <li><code>viewer/asset_viewer.py</code></li>
+            <li><code>viewer/student_submission/part1_fk.py</code></li>
+            <li><code>viewer/motion_sequences.py</code></li>
+            <li><code>assets/blocky/marigold.asset.json</code></li>
+            <li><code>assets/blocky/azure.asset.json</code></li>
+          </ul>
+          <p>You do not need to understand the entire viewer. Focus on:</p>
+          <ul>
+            <li>how joint data is loaded</li>
+            <li>where the parent array / hierarchy is stored</li>
+            <li>where the viewer loads the FK implementation</li>
+            <li>how a posed skeleton is turned into a visible character</li>
+          </ul>
+          <h2 id="part-1-tasks">Part 1 Tasks</h2>
+          <h3 id="task-1-run-the-viewer-and-inspect-the-skeleton">Task 1: Run the Viewer and Inspect the Skeleton</h3>
+          <p>Launch the viewer and spend time understanding the data before editing code.</p>
+          <p>Use the controls to inspect:</p>
+          <ul>
+            <li>the rigid mesh</li>
+            <li>the skeleton overlay</li>
+            <li>joint labels and joint handles</li>
+            <li>the built-in walk and wave motions</li>
+          </ul>
+          <p>You should be able to point to the shoulder, elbow, hip, knee, and root in the viewer and identify their names in the code.</p>
+          <h3 id="task-2-implement-generic-forward-kinematics">Task 2: Implement Generic Forward Kinematics</h3>
+          <p>Implement the FK routine in the student starter code.</p>
+          <p>Requirements:</p>
+          <ul>
+            <li>the implementation should work for any valid parent-child joint tree, not just one special case</li>
+            <li>you should not rely on the joint list already being in parent-before-child order unless the starter code explicitly gives you a topological order</li>
+            <li>the output must be one world rotation and one world position per joint</li>
+          </ul>
+          <p>In plain language, this means:</p>
+          <ul>
+            <li>your code should work if we change the character but keep the same kind of skeleton data</li>
+            <li>your code should work if joints appear in a different order in the file</li>
+            <li>your code should use the parent relationship, not hardcoded assumptions such as "joint 3 is always processed after joint 2"</li>
+          </ul>
+          <p>At minimum, your implementation should be correct for both provided block characters.</p>
+          <h3 id="task-3-validate-the-implementation">Task 3: Validate the Implementation</h3>
+          <p>Use the viewer to test your FK implementation on the provided motions.</p>
+          <p>Check at least the following:</p>
+          <ul>
+            <li>rotating a shoulder moves the elbow and wrist</li>
+            <li>rotating a hip moves the knee and ankle</li>
+            <li>world-space joint positions follow the hierarchy correctly</li>
+            <li>the rigid blocks stay attached to their assigned joints</li>
+          </ul>
+          <p>You should actively look for failure cases such as:</p>
+          <ul>
+            <li>children moving without the parent</li>
+            <li>joints rotating in place but not translating correctly</li>
+            <li>mirrored or reversed motion caused by incorrect multiplication order</li>
+          </ul>
+          <h3 id="task-4-author-a-custom-motion">Task 4: Author a Custom Motion</h3>
+          <p>Create one short motion clip using the timeline tools in the viewer.</p>
+          <p>Requirements:</p>
+          <ul>
+            <li>at least <code>10</code> keyframes</li>
+            <li>use the provided interpolation; you do not need to implement interpolation in this part</li>
+            <li>the motion must involve at least one arm chain and one leg chain</li>
+            <li>include a clear beginning, middle, and ending pose</li>
+            <li>include either root translation or visible body-weight shift</li>
+            <li>the result should be saved to the motion library and exported as a short video</li>
+          </ul>
+          <p>Examples:</p>
+          <ul>
+            <li>step forward, crouch, jump, land, and recover balance</li>
+            <li>wave to someone, turn the body, step sideways, and wave again</li>
+            <li>prepare, kick, recoil, and transition into a different pose</li>
+            <li>take two dance steps with coordinated arm motion and a final pose</li>
+            <li>reach down, pick up an imaginary object, stand, and present it</li>
+          </ul>
+          <p>Choose a motion phrase rather than a single isolated action. It should be simple enough to debug, but non-trivial enough that bad FK would be obvious.</p>
+          <h2 id="what-to-bring-to-help-sessions">What To Bring To Help Sessions</h2>
+          <p>If you get stuck, bring a concrete debugging example:</p>
+          <ul>
+            <li>a screenshot with a broken pose</li>
+            <li>the joint chain that is behaving incorrectly</li>
+            <li>the part of the FK recurrence you are unsure about</li>
+          </ul>
+          <p>That will make the help sessions much more productive than saying "the motion looks wrong".</p>
+          <h2 id="part-1-output">Part 1 Output</h2>
+          <p>By the end of this part you should have:</p>
+          <ul class="checklist">
+            <li>a working FK implementation</li>
+            <li>one saved custom motion clip with at least <code>10</code> keyframes</li>
+            <li>one short exported video showing the result</li>
+          </ul>
+          <p>This work feeds directly into Part 2, where the same motion will be reused on SMPL.</p>
+          <p>There is no separate report submission at the end of Part 1. Keep these files and figures ready for the interim submission:</p>
+          <ul class="checklist">
+            <li>your code</li>
+            <li>one saved motion clip from the viewer</li>
+            <li>one short exported video</li>
+            <li>one screenshot of the skeleton or joint hierarchy in the viewer</li>
+            <li>one screenshot or frame from your custom motion</li>
+          </ul>
+          <p>For the report requirements, see the interim report section in <a href="part2.html">Part 2</a>.</p>
+        </article>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        Generated from Markdown source: <a href="https://github.com/CambridgeCVCourses/IIA-Project-GF5/blob/main/docs/part1.md">part1.md</a>.
+      </div>
+    </footer>
+  </body>
+</html>

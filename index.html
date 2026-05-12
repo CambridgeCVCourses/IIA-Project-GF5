@@ -1,0 +1,192 @@
+<!doctype html>
+<!-- Generated from project_overview.md by docs/build_site.py. Do not edit by hand. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GF5: Animating 3D Characters</title>
+    <link rel="stylesheet" href="assets/site.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="nav-shell">
+        <a class="brand" href="index.html" aria-label="GF5 home">
+          <span class="brand-mark">GF5</span>
+          <span>GF5: Animating 3D Characters</span>
+        </a>
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="index.html" aria-current="page">Overview</a>
+          <a href="setup.html">Setup</a>
+          <a href="part1.html">Part 1</a>
+          <a href="part2.html">Part 2</a>
+          <a href="interim.html">Interim</a>
+          <a href="part3.html">Part 3</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="page doc-page">
+      <section class="release-band">
+        <div>
+          <p class="eyebrow">Parts 1 and 2 release</p>
+          <h1>GF5: Animating 3D Characters</h1>
+          <p class="lede">The Markdown handouts are the source of truth; this page is generated from them for the student-facing release.</p>
+          <div class="actions">
+            <a class="button primary" href="setup.html">Start setup</a>
+            <a class="button" href="part1.html">Open Part 1</a>
+            <a class="button" href="part2.html">Open Part 2</a>
+          </div>
+        </div>
+        <figure class="visual-panel" aria-label="Animation viewer preview">
+          <img src="assets/gf5-rig-preview.svg" alt="Diagram of the GF5 viewer showing a block character, skeleton, skinning weights, and a timeline.">
+        </figure>
+      </section>
+      <section class="release-strip" aria-label="Release summary">
+        <div class="metric">
+          <strong>Part 1</strong>
+          <span>Forward kinematics and a saved custom motion.</span>
+        </div>
+        <div class="metric">
+          <strong>Part 2</strong>
+          <span>Skinning weights, one-hot binding, and LBS comparison.</span>
+        </div>
+        <div class="metric">
+          <strong>Interim</strong>
+          <span>Code, videos, figures, and the report checkpoint.</span>
+        </div>
+        <div class="metric">
+          <strong>Part 3</strong>
+          <span>Public placeholder kept ready for the later brief.</span>
+        </div>
+      </section>
+
+      <div class="doc-shell">
+        <aside class="doc-toc" aria-label="On this page">
+          <strong>On this page</strong>
+            <a href="#what-this-project-is-about">What This Project Is About</a>
+            <a href="#assumed-background">Assumed Background</a>
+            <a href="#why-the-project-starts-with-a-block-character">Why The Project Starts With A Block Character</a>
+            <a href="#project-parts">Project Parts</a>
+            <a href="#interim-checkpoint">Interim Checkpoint</a>
+            <a href="#use-of-ai-tools">Use Of AI Tools</a>
+            <a href="#main-files">Main Files</a>
+        </aside>
+        <article class="doc-content">
+          <h2 id="what-this-project-is-about">What This Project Is About</h2>
+          <p>This project studies a simple version of the character-animation pipeline:</p>
+          <ol>
+            <li>represent a character as a skeleton and a mesh</li>
+            <li>pose the skeleton with forward kinematics</li>
+            <li>attach a surface to that skeleton with skinning weights</li>
+            <li>turn a sequence of poses into a short animation</li>
+          </ol>
+          <p>The emphasis is on understanding the mechanics of animation, not on learning a large authoring package.</p>
+          <h2 id="assumed-background">Assumed Background</h2>
+          <p>You are expected to be comfortable with:</p>
+          <ul>
+            <li>basic Python</li>
+            <li>vectors and matrices</li>
+            <li>reading and modifying small codebases</li>
+          </ul>
+          <p>You are not expected to have prior experience with:</p>
+          <ul>
+            <li>3D graphics</li>
+            <li>rigging</li>
+            <li>animation software</li>
+            <li>SMPL or human-body models</li>
+          </ul>
+          <p>Before running the viewer, create the Python environment from the shipped <code>env.yml</code> file.</p>
+          <h2 id="why-the-project-starts-with-a-block-character">Why The Project Starts With A Block Character</h2>
+          <p>The early parts use a blocky articulated character rather than a realistic human mesh.</p>
+          <p>That is deliberate. A block character makes the hierarchy easy to see:</p>
+          <ul>
+            <li>each body part is rigid</li>
+            <li>each joint is easy to identify</li>
+            <li>FK bugs are visually obvious</li>
+          </ul>
+          <p>Once the skeleton logic is clear, we switch to SMPL and study mesh deformation.</p>
+          <h2 id="project-parts">Project Parts</h2>
+          <h3 id="part-1">Part 1</h3>
+          <p>Focus:</p>
+          <ul>
+            <li>joint hierarchies</li>
+            <li>local versus world transforms</li>
+            <li>forward kinematics</li>
+            <li>key poses and timeline-based motion authoring</li>
+          </ul>
+          <p>See <a href="part1.html">Part 1</a> for the exact coding tasks, required outputs, and the part-1 material that must be prepared for the interim report.</p>
+          <h3 id="part-2">Part 2</h3>
+          <p>Focus:</p>
+          <ul>
+            <li>rest pose</li>
+            <li>skinning weights</li>
+            <li>one-hot skinning</li>
+            <li>comparison with linear blend skinning (LBS)</li>
+            <li>motion reuse on SMPL</li>
+          </ul>
+          <p>See <a href="part2.html">Part 2</a> for the exact coding tasks and implementation requirements.</p>
+          <h3 id="part-3">Part 3</h3>
+          <p>Focus:</p>
+          <ul>
+            <li>later group character-animation work building on the same FK and skinning pipeline</li>
+            <li>final brief and deliverables to be released after the interim checkpoint</li>
+          </ul>
+          <p>The Part 3 brief is not part of the current Parts 1 and 2 release. Use the <a href="part3.html">Part 3 placeholder</a> for release status.</p>
+          <h2 id="interim-checkpoint">Interim Checkpoint</h2>
+          <p>At the end of Part 2, you should have enough material for an interim report.</p>
+          <p>The exact required content, figures, videos, code submission, and report structure are defined in the relevant handouts:</p>
+          <ul>
+            <li><a href="part1.html">Part 1</a> for the part-1 material you must carry forward</li>
+            <li><a href="part2.html">Part 2</a> for the skinning tasks and evidence you need to collect</li>
+            <li><a href="interim.html">Interim Report</a> for the complete report and submission requirements</li>
+          </ul>
+          <h2 id="use-of-ai-tools">Use Of AI Tools</h2>
+          <p>For this project, you should not use AI tools to generate the work that you submit.</p>
+          <p>In particular, do not use AI tools to:</p>
+          <ul>
+            <li>write or substantially rewrite your code</li>
+            <li>derive the core math for you</li>
+            <li>write sections of your report</li>
+            <li>generate fake results, figures, citations, or explanations</li>
+          </ul>
+          <p>The point of the project is for you to implement, test, and explain the animation pipeline yourself.</p>
+          <p>If you use AI tools at all, keep it to minor support only, for example:</p>
+          <ul>
+            <li>asking for clarification of a concept or notation you are struggling with</li>
+            <li>spelling or grammar checks on text you wrote yourself</li>
+            <li>help with software setup or environment issues</li>
+          </ul>
+          <p>The interim report should include a short <code>AI Use Statement</code> saying either:</p>
+          <ul>
+            <li><code>No AI tools used</code>, or</li>
+            <li>what limited non-substantive use, if any, you made of AI tools</li>
+          </ul>
+          <h2 id="main-files">Main Files</h2>
+          <p>The core teaching code lives in:</p>
+          <ul>
+            <li><code>viewer/asset_viewer.py</code></li>
+            <li><code>viewer/motion_sequences.py</code></li>
+            <li><code>viewer/skeleton_profiles.py</code></li>
+            <li><code>viewer/smpl_support.py</code></li>
+          </ul>
+          <p>The viewer is used throughout Parts 1 and 2 for:</p>
+          <ul>
+            <li>skeleton inspection</li>
+            <li>pose editing</li>
+            <li>timeline authoring</li>
+            <li>skinning-weight visualisation</li>
+            <li>video export</li>
+          </ul>
+          <p>It also provides the starting point for Part 3 motion preview and evidence export where appropriate after the later brief is released.</p>
+        </article>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        Generated from Markdown source: <a href="https://github.com/CambridgeCVCourses/IIA-Project-GF5/blob/main/docs/project_overview.md">project_overview.md</a>.
+      </div>
+    </footer>
+  </body>
+</html>

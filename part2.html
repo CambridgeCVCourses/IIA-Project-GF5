@@ -1,0 +1,194 @@
+<!doctype html>
+<!-- Generated from part2.md by docs/build_site.py. Do not edit by hand. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Part 2: Skinning Weights, One-Hot Binding, and SMPL | GF5: Animating 3D Characters</title>
+    <link rel="stylesheet" href="assets/site.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="nav-shell">
+        <a class="brand" href="index.html" aria-label="GF5 home">
+          <span class="brand-mark">GF5</span>
+          <span>GF5: Animating 3D Characters</span>
+        </a>
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="index.html">Overview</a>
+          <a href="setup.html">Setup</a>
+          <a href="part1.html">Part 1</a>
+          <a href="part2.html" aria-current="page">Part 2</a>
+          <a href="interim.html">Interim</a>
+          <a href="part3.html">Part 3</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="page doc-page">
+      <section class="doc-hero">
+        <div>
+          <p class="eyebrow">Part 2</p>
+          <h1>Part 2: Skinning Weights, One-Hot Binding, and SMPL</h1>
+          <div class="actions">
+            <a class="button" href="part1.html">Previous: Part 1</a>
+            <a class="button primary" href="interim.html">Next: Interim</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="doc-shell">
+        <aside class="doc-toc" aria-label="On this page">
+          <strong>On this page</strong>
+            <a href="#why-this-part-matters">Why This Part Matters</a>
+            <a href="#learning-goals">Learning Goals</a>
+            <a href="#minimal-technical-background">Minimal Technical Background</a>
+            <a href="#code-map">Code Map</a>
+            <a href="#part-2-tasks">Part 2 Tasks</a>
+            <a href="#self-check-questions">Self-Check Questions</a>
+            <a href="#what-to-bring-to-help-sessions">What To Bring To Help Sessions</a>
+        </aside>
+        <article class="doc-content">
+          <h2 id="why-this-part-matters">Why This Part Matters</h2>
+          <p>In Part 1, each block was attached rigidly to one joint. That was useful for learning FK, but it is not how real character surfaces behave.</p>
+          <p>A deformable mesh bends because vertices near a joint are influenced by more than one bone. Part 2 studies that idea directly using SMPL, a standard human body model with a realistic mesh and skinning weights.</p>
+          <p>The key question for this part is:</p>
+          <p>How much of the final animation comes from the skeleton pose, and how much comes from the way the mesh is attached to that skeleton?</p>
+          <h2 id="learning-goals">Learning Goals</h2>
+          <p>By the end of Part 2, you should be able to:</p>
+          <ul class="checklist">
+            <li>explain what a skinning weight means</li>
+            <li>derive one-hot skinning from a full weight matrix</li>
+            <li>explain why one-hot attachment creates artifacts near elbows, shoulders, hips, and knees</li>
+            <li>compare one-hot binding against linear blend skinning (LBS)</li>
+            <li>reuse the same motion on both the toy character and SMPL</li>
+          </ul>
+          <h2 id="minimal-technical-background">Minimal Technical Background</h2>
+          <h3 id="rest-pose">Rest Pose</h3>
+          <p>The rest pose is the default unposed mesh and skeleton.</p>
+          <p>Skinning starts with:</p>
+          <ul>
+            <li>a rest-pose mesh</li>
+            <li>a skeleton</li>
+            <li>a set of per-vertex weights</li>
+          </ul>
+          <h3 id="skinning-weights">Skinning Weights</h3>
+          <p>For each vertex <code>v_i</code>, the model stores weights <code>w_ij</code> telling us how strongly joint <code>j</code> influences that vertex.</p>
+          <p>The weights are usually non-negative and sum to <code>1</code>.</p>
+          <h3 id="one-hot-skinning">One-Hot Skinning</h3>
+          <p>One-hot skinning is the simplest baseline:</p>
+          <ul>
+            <li>find the joint with the largest weight for each vertex</li>
+            <li>set that joint's weight to <code>1</code></li>
+            <li>set all other weights to <code>0</code></li>
+          </ul>
+          <p>This creates rigid piecewise motion. It is easy to implement and easy to interpret, which is why it is a good first baseline.</p>
+          <h3 id="linear-blend-skinning">Linear Blend Skinning</h3>
+          <p>In LBS, a posed vertex is a weighted sum of the transforms from several joints:</p>
+          <pre><code class="language-text">v&#x27;_i = sum_j w_ij T_j v_i</code></pre>
+          <p>You do not need to derive the full production form of LBS in this part, but you do need to understand the idea: vertices near joints are shared across influences instead of being assigned to a single bone.</p>
+          <h3 id="smpl">SMPL</h3>
+          <p>SMPL is a standard articulated human body model used widely in graphics and vision. In this project it gives us:</p>
+          <ul>
+            <li>a human mesh</li>
+            <li>a standard skeleton</li>
+            <li>a realistic set of skinning weights</li>
+          </ul>
+          <p>That makes it a good bridge from the simple Part-1 rig to a more realistic animation pipeline.</p>
+          <h2 id="code-map">Code Map</h2>
+          <p>The main files for this part are:</p>
+          <ul>
+            <li><code>viewer/asset_viewer.py</code></li>
+            <li><code>viewer/smpl_support.py</code></li>
+            <li><code>viewer/student_submission/part2_skinning.py</code></li>
+            <li><code>viewer/skeleton_profiles.py</code></li>
+          </ul>
+          <p>The viewer already supports:</p>
+          <ul>
+            <li>loading SMPL</li>
+            <li>visualising one-hot and LBS results</li>
+            <li>visualising skinning weights</li>
+            <li>exporting videos</li>
+            <li>reusing saved motion clips from Part 1</li>
+          </ul>
+          <h2 id="part-2-tasks">Part 2 Tasks</h2>
+          <h3 id="task-1-load-smpl-and-reuse-your-part-1-motion">Task 1: Load SMPL and Reuse Your Part-1 Motion</h3>
+          <p>Take the motion you created in Part 1 and run it on:</p>
+          <ul>
+            <li>one block character</li>
+            <li>SMPL</li>
+          </ul>
+          <p>This is important: the motion should stay the same. What changes now is the character model and the mesh attachment.</p>
+          <h3 id="task-2-implement-smpl-one-hot-skinning">Task 2: Implement SMPL One-Hot Skinning</h3>
+          <p>Implement the one-hot version of skinning for SMPL.</p>
+          <p>Requirements:</p>
+          <ul>
+            <li>start from the provided SMPL weight matrix</li>
+            <li>assign each vertex to the single joint with the maximum weight</li>
+            <li>do not hardcode a precomputed one-hot mesh file</li>
+          </ul>
+          <p>This task should produce a deliberately limited baseline that is useful for comparison.</p>
+          <h3 id="task-3-implement-smpl-linear-blend-skinning">Task 3: Implement SMPL Linear Blend Skinning</h3>
+          <p>Implement linear blend skinning for SMPL using the provided weight matrix and posed joint transforms.</p>
+          <p>Requirements:</p>
+          <ul>
+            <li>use the provided SMPL weights directly</li>
+            <li>compute the posed vertex positions from the weighted combination of joint transforms</li>
+            <li>do not use a hidden pre-written skinning helper in the student version</li>
+          </ul>
+          <p>You are not being asked to rebuild the full SMPL model. The task is the skinning stage only.</p>
+          <h3 id="task-4-compare-one-hot-against-lbs">Task 4: Compare One-Hot Against LBS</h3>
+          <p>Use the viewer to compare:</p>
+          <ul>
+            <li>one-hot SMPL</li>
+            <li>LBS SMPL</li>
+          </ul>
+          <p>Use the same motion on both.</p>
+          <p>You should examine at least two stress regions, for example:</p>
+          <ul>
+            <li>elbow</li>
+            <li>shoulder</li>
+            <li>knee</li>
+            <li>hip</li>
+          </ul>
+          <p>You should also inspect skinning-weight visualisations for at least two joints.</p>
+          <h3 id="task-5-produce-evidence-not-just-code">Task 5: Produce Evidence, Not Just Code</h3>
+          <p>By the end of Part 2, you should have concrete results, not just an implementation.</p>
+          <p>At minimum, collect:</p>
+          <ul>
+            <li>one short video of your custom motion on the toy rig</li>
+            <li>one short video showing the same motion on SMPL</li>
+            <li>side-by-side comparisons of one-hot and LBS on at least two challenging poses</li>
+            <li>at least two weight visualisations for selected joints</li>
+          </ul>
+          <p>The interim checkpoint is specified separately in the <a href="interim.html">Interim Report</a> handout.</p>
+          <h2 id="self-check-questions">Self-Check Questions</h2>
+          <p>These questions are for your own understanding and revision. They are not required report questions.</p>
+          <p>If you can answer them clearly, you are probably on the right track:</p>
+          <ul>
+            <li>Why is one-hot attachment a useful baseline even though it looks worse?</li>
+            <li>Why do artifacts appear mainly near joints rather than in the middle of a limb segment?</li>
+            <li>Why can the same motion look acceptable on the toy rig but poor on one-hot SMPL?</li>
+            <li>Why are skinning weights properties of the character model, not of the motion clip?</li>
+          </ul>
+          <h2 id="what-to-bring-to-help-sessions">What To Bring To Help Sessions</h2>
+          <p>Bring one specific artifact or failure case, not just a general complaint.</p>
+          <p>Good examples:</p>
+          <ul>
+            <li>"the elbow collapses in one-hot mode but looks smoother with LBS"</li>
+            <li>"my one-hot assignment seems to use the wrong dominant joint near the shoulder"</li>
+            <li>"the motion transfers correctly, but the deformation near the knee looks too rigid"</li>
+          </ul>
+          <p>Those are much easier to diagnose than "SMPL looks wrong".</p>
+        </article>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        Generated from Markdown source: <a href="https://github.com/CambridgeCVCourses/IIA-Project-GF5/blob/main/docs/part2.md">part2.md</a>.
+      </div>
+    </footer>
+  </body>
+</html>
