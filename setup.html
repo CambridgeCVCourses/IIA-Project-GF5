@@ -45,29 +45,35 @@
             <a href="#run-the-viewer">Run The Viewer</a>
             <a href="#files-you-will-edit">Files You Will Edit</a>
             <a href="#main-viewer-controls">Main Viewer Controls</a>
+            <a href="#local-files-and-outputs">Local Files And Outputs</a>
             <a href="#smpl-model-files">SMPL Model Files</a>
+            <a href="#troubleshooting">Troubleshooting</a>
             <a href="#next-step">Next Step</a>
         </aside>
         <article class="doc-content">
-          <p>The project uses a local Python viewer for skeleton inspection, pose editing, skinning-weight visualisation, and video export.</p>
+          <p>This is the canonical student setup guide for running the GF5 viewer.</p>
           <h2 id="create-the-environment">Create The Environment</h2>
-          <p>From the repository root, create and activate the course environment once:</p>
-          <pre><code class="language-bash">mamba env create -f env.yml
-          mamba activate gf5</code></pre>
+          <p>From the repository root, create the course environment once:</p>
+          <pre><code class="language-bash">mamba env create -f env.yml</code></pre>
+          <p>Then activate it whenever you work on the project:</p>
+          <pre><code class="language-bash">mamba activate gf5</code></pre>
+          <p>If the environment already exists and the project has been updated, refresh it:</p>
+          <pre><code class="language-bash">mamba env update -f env.yml --prune</code></pre>
           <h2 id="run-the-viewer">Run The Viewer</h2>
           <p>Start the local viewer from the repository root:</p>
           <pre><code class="language-bash">python viewer/asset_viewer.py</code></pre>
+          <p>This opens the viewer page in your browser automatically.</p>
           <p>If the default port is already in use, choose another port:</p>
           <pre><code class="language-bash">python viewer/asset_viewer.py --port 8090</code></pre>
           <p>For a remote or headless session, suppress automatic browser opening:</p>
           <pre><code class="language-bash">python viewer/asset_viewer.py --no-open-browser</code></pre>
-          <p>Then open the printed <code>localhost</code> URL in a browser.</p>
+          <p>Then open the printed <code>localhost</code> URL in a browser or forward the printed port from the remote machine.</p>
           <h2 id="files-you-will-edit">Files You Will Edit</h2>
           <p>For Part 1, implement forward kinematics in:</p>
           <pre><code class="language-text">viewer/student_submission/part1_fk.py</code></pre>
           <p>For Part 2, implement one-hot and LBS skinning in:</p>
           <pre><code class="language-text">viewer/student_submission/part2_skinning.py</code></pre>
-          <p>You will also use these files to understand how data flows through the viewer:</p>
+          <p>Useful viewer files to read when following data flow:</p>
           <ul>
             <li><code>viewer/asset_viewer.py</code></li>
             <li><code>viewer/motion_sequences.py</code></li>
@@ -82,11 +88,22 @@
             <li><code>Timeline</code>: capture keyframes for the custom Part 1 motion.</li>
             <li><code>Export Motion Video</code>: render evidence videos for the interim submission.</li>
           </ul>
+          <h2 id="local-files-and-outputs">Local Files And Outputs</h2>
+          <p>The viewer may create local working folders while you experiment:</p>
+          <ul>
+            <li><code>libraries/</code>: poses and motions saved from the viewer</li>
+            <li><code>exports/</code>: rendered videos</li>
+            <li><code>.viewer_imports/</code>: uploaded character packages</li>
+          </ul>
+          <p>These folders are local outputs, not files you need to submit as source code.</p>
           <h2 id="smpl-model-files">SMPL Model Files</h2>
           <p>SMPL model files are not included in the repository. If you have access to them, place them under:</p>
           <pre><code class="language-text">assets/smpl/models/</code></pre>
           <p>or start the viewer with an explicit model path:</p>
           <pre><code class="language-bash">python viewer/asset_viewer.py --smpl-model /path/to/smpl/model.pkl</code></pre>
+          <h2 id="troubleshooting">Troubleshooting</h2>
+          <p>Run viewer commands from the repository root, the directory containing <code>env.yml</code> and <code>viewer/</code>. Running the command from the wrong directory is the most common cause of <code>viewer/asset_viewer.py</code> not being found.</p>
+          <p>If video export fails, check that <code>ffmpeg</code> is installed and available on <code>PATH</code>.</p>
           <h2 id="next-step">Next Step</h2>
           <p>Once the viewer runs, continue to <a href="part1.html">Part 1</a>.</p>
         </article>
