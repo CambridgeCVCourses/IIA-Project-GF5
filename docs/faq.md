@@ -112,3 +112,10 @@ Temporary fixes:
 
 If you can reach the page on mobile data but not on WiFi, report the WiFi
 network name and the exact browser error message.
+
+## 6. What If The HY-Motion Demo Says I Have Hit A Hugging Face Limit?
+
+The public HY-Motion demo runs on Hugging Face, so anonymous usage can sometimes
+hit a rate or quota limit. If this happens, sign up for a free Hugging Face
+account and log in before trying the demo again. Free accounts usually receive a
+higher quota than anonymous users.
