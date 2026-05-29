@@ -41,6 +41,7 @@ REQUIRED_PATHS = (
     "libraries/motions/preset",
     "viewer/hy_motion_import.py",
     "viewer/scene_web_server.py",
+    "viewer/avatar_export_worker.py",
 )
 
 FORBIDDEN_GLOBS = (
