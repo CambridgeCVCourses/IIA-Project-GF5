@@ -3,6 +3,8 @@ from __future__ import annotations
 import argparse
 import json
 import mimetypes
+import subprocess
+import sys
 import tempfile
 import threading
 import traceback
@@ -109,13 +111,20 @@ class SceneEditorServer(ThreadingHTTPServer):
 
         def run() -> None:
             try:
-                video_path = export_avatar_scene_video(
-                    scene,
-                    self.export_dir,
-                    avatar_assets,
-                    self.project_root,
-                    progress_callback=update_progress,
-                )
+                if sys.platform == "darwin":
+                    video_path = self.run_avatar_export_worker(
+                        scene=scene,
+                        avatar_assets=avatar_assets,
+                        progress_callback=update_progress,
+                    )
+                else:
+                    video_path = export_avatar_scene_video(
+                        scene,
+                        self.export_dir,
+                        avatar_assets,
+                        self.project_root,
+                        progress_callback=update_progress,
+                    )
                 self.set_export_job(
                     job_id,
                     status="done",
@@ -135,6 +144,68 @@ class SceneEditorServer(ThreadingHTTPServer):
         thread = threading.Thread(target=run, name=f"scene-export-{job_id[:8]}", daemon=True)
         thread.start()
         return job_id
+
+    def run_avatar_export_worker(
+        self,
+        *,
+        scene: dict[str, Any],
+        avatar_assets: list[dict[str, str]],
+        progress_callback: Any,
+    ) -> Path:
+        worker_path = self.project_root / "viewer" / "avatar_export_worker.py"
+        payload = {
+            "scene": scene,
+            "avatar_assets": avatar_assets,
+            "project_root": str(self.project_root),
+            "output_dir": str(self.export_dir),
+        }
+        with tempfile.NamedTemporaryFile("w", suffix=".json", encoding="utf-8", delete=False) as handle:
+            json.dump(payload, handle)
+            input_path = Path(handle.name)
+        command = [sys.executable, str(worker_path), "--input", str(input_path)]
+        output_tail: list[str] = []
+        worker_error = ""
+        video_path: Path | None = None
+        try:
+            process = subprocess.Popen(
+                command,
+                cwd=str(self.project_root),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+            )
+            if process.stdout is not None:
+                for line in process.stdout:
+                    text = line.strip()
+                    if not text:
+                        continue
+                    try:
+                        event = json.loads(text)
+                    except json.JSONDecodeError:
+                        output_tail.append(text)
+                        output_tail = output_tail[-20:]
+                        continue
+                    event_type = str(event.get("type", ""))
+                    if event_type == "progress":
+                        progress_callback(int(event.get("frame", 0)), int(event.get("frames", 0)))
+                    elif event_type == "done":
+                        video_path = Path(str(event.get("video_path", "")))
+                    elif event_type == "error":
+                        worker_error = str(event.get("error", "Final render worker failed."))
+            returncode = process.wait()
+            if returncode != 0:
+                details = "\n".join(output_tail)
+                message = worker_error or f"Final render worker exited with code {returncode}."
+                if details:
+                    message = f"{message}\n{details}"
+                raise RuntimeError(message)
+            if video_path is None:
+                raise RuntimeError("Final render worker finished without reporting an output video.")
+            return video_path
+        finally:
+            input_path.unlink(missing_ok=True)
 
 
 class SceneEditorHandler(BaseHTTPRequestHandler):

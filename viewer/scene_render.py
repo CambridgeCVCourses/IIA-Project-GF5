@@ -926,6 +926,9 @@ class OffscreenAvatarRenderer:
         if Image is None:
             raise RuntimeError("Pillow is required for final avatar rendering.") from PIL_IMPORT_ERROR
         opengl_platform = os.environ.get("PYOPENGL_PLATFORM", "").strip().lower()
+        if opengl_platform == "auto":
+            os.environ.pop("PYOPENGL_PLATFORM", None)
+            opengl_platform = ""
         if sys.platform.startswith("linux") and not opengl_platform:
             os.environ["PYOPENGL_PLATFORM"] = "egl"
         elif sys.platform.startswith("win") and opengl_platform in {"win32", "windows", "nt"}:
@@ -960,6 +963,8 @@ class OffscreenAvatarRenderer:
             raise RuntimeError(
                 "Could not create a pyrender offscreen renderer. "
                 f"Current PYOPENGL_PLATFORM is {platform_hint}. "
+                "On macOS, run from a local desktop Terminal session; final avatar export "
+                "uses a helper process so pyrender can create its OpenGL context on the main thread. "
                 "On Windows, leave PYOPENGL_PLATFORM unset and run from a normal desktop session. "
                 "On headless Linux, try PYOPENGL_PLATFORM=egl or check EGL/OpenGL availability."
             ) from exc
