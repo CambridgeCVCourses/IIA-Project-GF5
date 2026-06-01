@@ -245,7 +245,7 @@ def local_video_embed(markdown: str) -> str:
 SCHEDULE_COLUMNS = [
     ("Tue", "am", "Tue AM", "11-13"),
     ("Fri", "am", "Fri AM", "9-11"),
-    ("Fri", "pm", "Fri PM", "14-16 / due"),
+    ("Fri", "pm", "Fri PM", "see cells / due"),
 ]
 SCHEDULE_WEEKS = [
     {
@@ -284,7 +284,7 @@ SCHEDULE_WEEKS = [
             "Tue": [("help", "Help", "11-13, BE454")],
             "Fri": [("help", "Help", "9-11, BE454")],
         },
-        "pm": {"Fri": [("mandatory", "Mandatory", "14-16, LR11")]},
+        "pm": {"Fri": [("mandatory", "Mandatory", "15-16, LR11")]},
     },
     {
         "label": "Week 4",
@@ -311,6 +311,7 @@ def schedule_calendar_embed(markdown: str = "") -> str:
     highlighted_events = {
         ("Week 2", "Fri", "am", "help", "Help", "9-10, BE454"),
         ("Week 2", "Fri", "pm", "deadline", "Interim due", "2pm"),
+        ("Week 3", "Fri", "pm", "mandatory", "Mandatory", "15-16, LR11"),
         ("Week 4", "Tue", "am", "presentation", "Showcase", "11-13, LT6"),
         ("Week 4", "Fri", "pm", "deadline", "Final report due", "4pm; animation due"),
     }
@@ -391,7 +392,8 @@ def schedule_calendar_embed(markdown: str = "") -> str:
         + (
             '<p class="calendar-change-note">'
             "<strong>Updated:</strong> Fri 29 May help is 9-10; interim report and results are due 2pm; "
-            "Tue 9 Jun showcase is in LT6; Fri 12 Jun has no help or mandatory session."
+            "Fri 5 Jun mandatory session is 15-16; Tue 9 Jun showcase is in LT6; "
+            "Fri 12 Jun has no help or mandatory session."
             "</p>"
             if highlight_updates
             else ""
