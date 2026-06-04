@@ -20,6 +20,7 @@ FORBIDDEN_PATHS = (
     "libraries/poses",
     "libraries/scenes",
     "docs/__pycache__",
+    "docs/future_edition_notes.md",
     "docs/part3_notes.md",
     "docs/staff_runbook.md",
     "docs/staff_release_workflow.md",
@@ -58,6 +59,7 @@ FORBIDDEN_GLOBS = (
 FORBIDDEN_TEXT = (
     "answer key",
     "correct implementation",
+    "future_edition_notes",
     "marking",
     "part3_notes",
     "reference_impl",
