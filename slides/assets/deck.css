@@ -524,6 +524,117 @@
   content: none;
 }
 
+.slide-content .presentation-order-tool.is-assignments {
+  display: block;
+  max-width: 62rem;
+  margin: -0.15rem auto 0;
+  padding: 0.72rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  box-shadow: 0 8px 18px rgb(30 42 50 / 8%);
+}
+
+.slide-content .presentation-order-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.55rem;
+}
+
+.slide-content .presentation-order-header strong {
+  font-size: 1.06rem;
+  font-weight: 900;
+}
+
+.slide-content .presentation-order-tool.is-assignments .button {
+  min-height: 2.25rem;
+  padding: 0.42rem 0.72rem;
+  font-size: 0.82rem;
+}
+
+.slide-content .presentation-order-tool.is-assignments ol {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(6, minmax(0, 1fr));
+  grid-auto-flow: column;
+  gap: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: presentation-order;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+  font-size: 0.82rem;
+  line-height: 1.12;
+}
+
+.slide-content .presentation-order-tool.is-assignments ol > li {
+  position: static;
+  display: grid;
+  grid-template-columns: 1.55rem minmax(0, 1fr) 3.2rem;
+  gap: 0.34rem;
+  align-items: center;
+  min-height: 2.55rem;
+  margin: 0;
+  padding: 0.34rem 0.46rem;
+  border: 0;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: #f7fbfa;
+  font-size: 0.92rem;
+  font-weight: 850;
+  counter-increment: presentation-order;
+}
+
+.slide-content .presentation-order-tool.is-assignments ol > li::before {
+  content: counter(presentation-order) ".";
+  position: static;
+  display: block;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.slide-content .presentation-order-tool.is-assignments ol > li:nth-child(6n) {
+  border-bottom: 0;
+}
+
+.slide-content .presentation-order-tool.is-assignments ol > li:nth-child(n + 13) {
+  border-right: 0;
+}
+
+.slide-content .presentation-order-tool.is-assignments span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.slide-content .presentation-order-tool.is-assignments input {
+  width: 100%;
+  min-width: 0;
+  height: 1.75rem;
+  padding: 0.12rem 0.22rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--ink);
+  background: #fff;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 800;
+  text-align: center;
+}
+
 .slide-content li + li {
   margin-top: 0;
 }

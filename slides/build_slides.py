@@ -71,6 +71,7 @@ class SlideMarkdownRenderer(MarkdownRenderer):
                 '<figure class="media-embed',
                 '<figure class="website-shot',
                 '<article class="resource-card',
+                '<section class="presentation-order-tool',
                 '<section class="schedule-calendar',
             )):
                 self.close_blocks()
@@ -483,6 +484,40 @@ def assessment_table(markdown: str) -> str:
     return markdown_table(["Coursework", "Due date", "Marks", "Mode"], rows) if rows else bullet_lines(markdown)
 
 
+def presentation_order_embed(markdown: str) -> str:
+    fields = [field for field in split_directive_fields(markdown) if field]
+    if fields and fields[0] in {"assignments", "compact"}:
+        fields = fields[1:]
+    names = fields or [f"Group {index}" for index in range(1, 10)]
+    if len(names) == 1:
+        try:
+            count = max(1, int(names[0]))
+        except ValueError:
+            pass
+        else:
+            names = [f"Group {index}" for index in range(1, count + 1)]
+
+    rendered_items = "".join(
+        "<li>"
+        f"<span>{html.escape(name)}</span>"
+        '<input type="text" inputmode="numeric" placeholder="No." '
+        'aria-label="Group order" data-order-assignment>'
+        "</li>"
+        for name in names
+    )
+    return (
+        '<section class="presentation-order-tool is-assignments" '
+        f'data-presentation-order data-order-mode="assignments" data-default-count="{len(names)}" '
+        'aria-label="Presentation order randomizer">'
+        '<div class="presentation-order-header">'
+        "<strong>Presentation order</strong>"
+        '<button class="button primary" type="button" data-order-shuffle>Shuffle</button>'
+        "</div>"
+        f"<ol data-order-result>{rendered_items}</ol>"
+        "</section>"
+    )
+
+
 def expand_directives(markdown: str, base_dir: Path) -> str:
     directive = re.compile(
         r"^\s*\{\{([a-z-]+):\s*([^}]+?)\s*\}\}\s*$"
@@ -507,6 +542,9 @@ def expand_directives(markdown: str, base_dir: Path) -> str:
 
         if mode == "schedule-calendar":
             expanded.extend(schedule_calendar_embed(payload).splitlines())
+            continue
+        if mode == "presentation-order":
+            expanded.append(presentation_order_embed(payload).replace("\n", ""))
             continue
         if mode == "video":
             expanded.extend(local_video_embed(payload).splitlines())
@@ -629,7 +667,7 @@ def render_section_nav(slides: list[Slide]) -> str:
         ("Editor", "Scene Motion Editor"),
         ("Avatars", "Custom Avatars"),
         ("Motion", "Text-to-Motion Generation"),
-        ("Report & Showcase", "Part 3 Showcase"),
+        ("Report & Showcase", "Interim Report Feedback"),
         ("Policy", "AI Use Policy"),
     ]
     by_title = {slide.title: slide.index for slide in slides}

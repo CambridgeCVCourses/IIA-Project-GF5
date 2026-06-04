@@ -387,6 +387,73 @@ used.
 
 ---
 
+# Interim Report Feedback
+
+Brief feedback on your interim reports has been uploaded to Moodle.
+
+- you all did a very good job
+- the tasks may have been a little too easy
+- grades were spread a bit by report quality and the motion sequence created
+
+???
+Keep this encouraging: the overall standard was strong, but the marks still
+needed to distinguish the clarity of the report and the quality of the motion
+sequence.
+
+---
+
+# A Few Report Notes
+
+- start with a brief summary of the report
+- write equations using proper mathematical notation
+- make FK robust to unsorted joint lists
+
+???
+For future reports, suggest a short opening summary even when it is not listed
+as an explicit requirement. One short paragraph is enough: what problem the
+report addresses, what method was used, what result was produced, and what the
+main limitation or takeaway is. It helps the reader understand the aim, method,
+and main result before the details.
+
+For equations, encourage proper mathematical notation rather than prose-only
+descriptions or code-like fragments. Define the variables, use matrices,
+vectors, indices, and composition notation clearly, and keep implementation
+details separate from the mathematical relationship being explained.
+
+Use the next slide to explain the FK ordering issue.
+
+---
+
+# FK Ordering Pitfall
+
+FK computes each joint world transform from its parent:
+
+`W[j] = W[parent[j]] @ L[j]`
+
+- this requires the parent's `W` to be ready first
+- a plain loop only works if parents appear before children
+- counterexample order: `wrist`, `elbow`, `shoulder`
+- robust FK should sort parent-to-child, or recurse
+
+???
+Use a simple arm example. The shoulder is the parent of the elbow, and the
+elbow is the parent of the wrist. The wrist's world transform depends on the
+shoulder world transform, then the elbow world transform, then the wrist's own
+local transform.
+
+If the stored list is `wrist`, `elbow`, `shoulder`, and the code simply loops
+through the list, it reaches the wrist before the elbow and shoulder world
+transforms have been computed. That plain loop can therefore use a missing,
+identity, old, or otherwise wrong parent transform.
+
+Our course character happens to have its joints sorted parent-to-child, so this
+bug may not show up on the given data. A robust FK implementation should not
+depend on that convenience: either topologically sort the joints from the
+parent array before looping, or compute recursively so each parent is computed
+before its child.
+
+---
+
 # Part 3 Showcase
 
 Tuesday 9 June 2026, 11am-1pm, LT6.
@@ -404,6 +471,17 @@ Tuesday 9 June 2026, 11am-1pm, LT6.
 Emphasize that this is not a formal viva or a polished pitch deck. It should be
 a short, technical, enjoyable show-and-tell from each group's own machine.
 Tips, tricks, surprises, and useful failures are welcome.
+
+---
+
+# Presentation Order
+
+{{presentation-order: assignments | Zohalb | Frank | Aaron | Madeleine | Sean | Donna | Elen | Encheng | Matthew | Yunge | Sarah | Rohan | Stan | Yilia | Kavita | Tianze | Sam | Serene}}
+
+???
+Click `Shuffle` once on the spot. Then ask students who is paired with whom and
+write the group presentation order in the text boxes beside the shuffled names.
+Use the shuffled top-to-bottom list as the random ordering source.
 
 ---
 
