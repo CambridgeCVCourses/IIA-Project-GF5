@@ -476,12 +476,16 @@ Tips, tricks, surprises, and useful failures are welcome.
 
 # Presentation Order
 
-{{presentation-order: assignments | Zohalb | Frank | Aaron | Madeleine | Sean | Donna | Elen | Encheng | Matthew | Yunge | Sarah | Rohan | Stan | Yilia | Kavita | Tianze | Sam | Serene}}
+| Order | Group | Order | Group |
+| --- | --- | --- | --- |
+| `1` | Matthew & Encheng | `6` | Elen & Sarah |
+| `2` | Madeleine & Kavita | `7` | Yilia & Frank |
+| `3` | Rohan & Sam | `8` | Tianze & Yunge |
+| `4` | Serene & Aaron | `9` | Donna & Stan |
+| `5` | Zohalb & Sean |  |  |
 
 ???
-Click `Shuffle` once on the spot. Then ask students who is paired with whom and
-write the group presentation order in the text boxes beside the shuffled names.
-Use the shuffled top-to-bottom list as the random ordering source.
+Use this as the confirmed showcase presentation order.
 
 ---
 

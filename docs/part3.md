@@ -110,8 +110,9 @@ and react; or a short group routine uses a loop, a gesture, and a final pose.
 
 ### Tool: Try A Custom 3D Avatar For Rendering
 
-The character reconstruction workflow creates a custom virtual character for
-rendering using [UP2You](https://github.com/zcai0612/UP2You).
+The [GF5 UP2You demo](https://gf5-up2you.elliottwu.com) creates a custom
+virtual character for rendering using
+[UP2You](https://github.com/zcai0612/UP2You).
 
 ![Screenshot of the 3D human reconstruction demo used to create a downloadable character package.](assets/3d_human_recon_demo.png)
 
