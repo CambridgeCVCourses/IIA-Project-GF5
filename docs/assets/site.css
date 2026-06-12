@@ -1333,6 +1333,9 @@ pre code {
   }
 
   .class-photos-section {
+    width: auto;
+    margin-right: -1.25rem;
+    margin-left: -1.25rem;
     padding-inline: 1rem;
   }
 
@@ -1349,6 +1352,14 @@ pre code {
 
   .class-photo-slide.is-active {
     transform-origin: left top;
+  }
+
+  .animation-thumbnails {
+    gap: 0.45rem;
+  }
+
+  .animation-thumb {
+    flex-basis: 7.25rem;
   }
 
   h1 {
