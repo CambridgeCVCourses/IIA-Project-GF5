@@ -169,6 +169,7 @@
   function initPhotoCarousels() {
     const carousels = Array.from(document.querySelectorAll("[data-photo-carousel]"));
     carousels.forEach((carousel) => {
+      const photoStack = carousel.querySelector("[data-photo-stack]");
       const slides = Array.from(carousel.querySelectorAll("[data-photo-slide]"));
       if (slides.length < 2) {
         return;
@@ -195,8 +196,42 @@
         timer = window.setInterval(() => setActive(activeIndex + 1), 4500);
       }
 
+      let dragStartX = 0;
+      let dragStartY = 0;
+      let dragPointerId = null;
+      let didDrag = false;
+      let suppressClick = false;
+
+      function endDrag(event) {
+        if (dragPointerId === null || event.pointerId !== dragPointerId) {
+          return;
+        }
+
+        const deltaX = event.clientX - dragStartX;
+        const deltaY = event.clientY - dragStartY;
+        dragPointerId = null;
+        if (!didDrag || Math.abs(deltaX) < 42 || Math.abs(deltaX) < Math.abs(deltaY) * 1.4) {
+          didDrag = false;
+          restartTimer();
+          return;
+        }
+
+        suppressClick = true;
+        didDrag = false;
+        setActive(activeIndex + (deltaX < 0 ? 1 : -1));
+        restartTimer();
+        window.setTimeout(() => {
+          suppressClick = false;
+        }, 0);
+      }
+
       slides.forEach((slide) => {
         function activateSlide() {
+          if (suppressClick) {
+            suppressClick = false;
+            return;
+          }
+
           const index = Number.parseInt(slide.getAttribute("data-photo-index") || "0", 10);
           if (index !== activeIndex) {
             setActive(index);
@@ -213,8 +248,44 @@
         });
       });
 
+      if (photoStack) {
+        photoStack.addEventListener("pointerdown", (event) => {
+          if (event.pointerType === "mouse" && event.button !== 0) {
+            return;
+          }
+
+          dragPointerId = event.pointerId;
+          dragStartX = event.clientX;
+          dragStartY = event.clientY;
+          didDrag = false;
+          if (photoStack.setPointerCapture) {
+            photoStack.setPointerCapture(event.pointerId);
+          }
+          window.clearInterval(timer);
+        });
+
+        photoStack.addEventListener("pointermove", (event) => {
+          if (dragPointerId === null || event.pointerId !== dragPointerId) {
+            return;
+          }
+
+          const deltaX = event.clientX - dragStartX;
+          const deltaY = event.clientY - dragStartY;
+          if (Math.abs(deltaX) > 12 && Math.abs(deltaX) > Math.abs(deltaY)) {
+            didDrag = true;
+          }
+        });
+
+        photoStack.addEventListener("pointerup", endDrag);
+        photoStack.addEventListener("pointercancel", endDrag);
+      }
+
       carousel.addEventListener("pointerenter", () => window.clearInterval(timer));
-      carousel.addEventListener("pointerleave", restartTimer);
+      carousel.addEventListener("pointerleave", () => {
+        if (dragPointerId === null) {
+          restartTimer();
+        }
+      });
       carousel.addEventListener("focusin", () => window.clearInterval(timer));
       carousel.addEventListener("focusout", restartTimer);
     });

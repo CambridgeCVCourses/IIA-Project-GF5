@@ -762,6 +762,7 @@ h3 {
   position: relative;
   min-height: clamp(28rem, 58.5vw, 42rem);
   overflow: hidden;
+  touch-action: pan-y;
   width: 100%;
 }
 
