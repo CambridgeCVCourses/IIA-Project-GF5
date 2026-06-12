@@ -762,7 +762,6 @@ h3 {
   position: relative;
   min-height: clamp(28rem, 58.5vw, 42rem);
   overflow: hidden;
-  touch-action: pan-y;
   width: 100%;
 }
 
@@ -1407,6 +1406,7 @@ pre code {
 
   .photo-stack {
     min-height: clamp(14rem, 66vw, 21.75rem);
+    touch-action: pan-y;
   }
 
   .class-photo-slide {

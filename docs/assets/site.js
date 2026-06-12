@@ -202,6 +202,10 @@
       let didDrag = false;
       let suppressClick = false;
 
+      function canSwipePhotos() {
+        return window.matchMedia("(max-width: 700px)").matches;
+      }
+
       function endDrag(event) {
         if (dragPointerId === null || event.pointerId !== dragPointerId) {
           return;
@@ -250,7 +254,7 @@
 
       if (photoStack) {
         photoStack.addEventListener("pointerdown", (event) => {
-          if (event.pointerType === "mouse" && event.button !== 0) {
+          if (event.pointerType === "mouse" || !canSwipePhotos()) {
             return;
           }
 
@@ -258,9 +262,6 @@
           dragStartX = event.clientX;
           dragStartY = event.clientY;
           didDrag = false;
-          if (photoStack.setPointerCapture) {
-            photoStack.setPointerCapture(event.pointerId);
-          }
           window.clearInterval(timer);
         });
 
