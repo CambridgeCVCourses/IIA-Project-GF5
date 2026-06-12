@@ -1336,9 +1336,12 @@ pre code {
   }
 
   .animation-thumbnail-scroll::before {
+    content: "";
     display: block;
-    font-size: 1.8rem;
-    line-height: 1;
+    width: 0.56rem;
+    height: 0.56rem;
+    border-top: 0.14rem solid currentColor;
+    border-right: 0.14rem solid currentColor;
   }
 
   .animation-thumbnail-scroll-left {
@@ -1346,7 +1349,7 @@ pre code {
   }
 
   .animation-thumbnail-scroll-left::before {
-    content: "\2039";
+    transform: translateX(0.08rem) rotate(225deg);
   }
 
   .animation-thumbnail-scroll-right {
@@ -1354,7 +1357,7 @@ pre code {
   }
 
   .animation-thumbnail-scroll-right::before {
-    content: "\203A";
+    transform: translateX(-0.08rem) rotate(45deg);
   }
 
   .animation-thumbnail-rail.is-at-start .animation-thumbnail-scroll-left,
