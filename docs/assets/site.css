@@ -756,7 +756,7 @@ h3 {
 
 .photo-stack {
   position: relative;
-  min-height: clamp(28rem, 50vw, 42rem);
+  min-height: clamp(28rem, 58.5vw, 42rem);
   overflow: hidden;
   width: 100%;
 }
@@ -1287,10 +1287,6 @@ pre code {
     grid-template-columns: 1fr;
   }
 
-  .photo-stack {
-    min-height: 0;
-  }
-
   .animation-thumbnails {
     display: flex;
     gap: 0.65rem;
@@ -1336,13 +1332,23 @@ pre code {
     padding-top: 1.4rem;
   }
 
+  .class-photos-section {
+    padding-inline: 1rem;
+  }
+
   .photo-stack {
-    min-height: 23rem;
+    min-height: clamp(14rem, 66vw, 21.75rem);
   }
 
   .class-photo-slide {
-    width: min(92vw, 32rem);
-    transform: translate(-1rem, 1.2rem) scale(0.92);
+    width: min(86vw, 28rem);
+    max-width: 100%;
+    transform: translate(0, 0.55rem) scale(0.82);
+    transform-origin: right top;
+  }
+
+  .class-photo-slide.is-active {
+    transform-origin: left top;
   }
 
   h1 {
