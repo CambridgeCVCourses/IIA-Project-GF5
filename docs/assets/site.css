@@ -1302,7 +1302,9 @@ pre code {
   .animation-thumbnails {
     display: flex;
     gap: 0.65rem;
+    max-width: 100%;
     overflow-x: auto;
+    overscroll-behavior-x: contain;
     padding-bottom: 0.25rem;
     scroll-snap-type: x proximity;
     scrollbar-width: none;

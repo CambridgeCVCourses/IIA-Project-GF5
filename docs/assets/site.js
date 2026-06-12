@@ -320,6 +320,25 @@
         thumbnailRail.classList.toggle("is-at-end", !hasOverflow || isAtEnd);
       }
 
+      function centerThumbnail(button) {
+        if (!thumbnailStrip) {
+          return;
+        }
+
+        const stripRect = thumbnailStrip.getBoundingClientRect();
+        const buttonRect = button.getBoundingClientRect();
+        const targetLeft =
+          thumbnailStrip.scrollLeft +
+          buttonRect.left -
+          stripRect.left -
+          (stripRect.width - buttonRect.width) / 2;
+        const maxLeft = thumbnailStrip.scrollWidth - thumbnailStrip.clientWidth;
+        thumbnailStrip.scrollTo({
+          left: Math.max(0, Math.min(maxLeft, targetLeft)),
+          behavior: "smooth",
+        });
+      }
+
       function setVideo(button, shouldPlay) {
         const videoSrc = button.getAttribute("data-video-src");
         const poster = button.getAttribute("data-video-poster");
@@ -348,7 +367,7 @@
           thumb.setAttribute("aria-current", isActive ? "true" : "false");
         });
 
-        button.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        centerThumbnail(button);
       }
 
       thumbs.forEach((button) => {
