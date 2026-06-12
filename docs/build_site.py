@@ -508,8 +508,16 @@ def class_showcase_embed(_markdown: str = "") -> str:
         "</div>"
         f'<figcaption data-animation-caption>{html.escape(first_credit)}</figcaption>'
         "</figure>"
-        '<div class="animation-thumbnails" aria-label="Select animation">'
+        '<div class="animation-thumbnail-rail" data-thumbnail-rail>'
+        '<button class="animation-thumbnail-scroll animation-thumbnail-scroll-left" '
+        'type="button" aria-label="Show previous animations" '
+        'data-thumbnail-scroll="left"></button>'
+        '<div class="animation-thumbnails" aria-label="Select animation" data-thumbnail-strip>'
         f"{animation_thumbnails}"
+        "</div>"
+        '<button class="animation-thumbnail-scroll animation-thumbnail-scroll-right" '
+        'type="button" aria-label="Show more animations" '
+        'data-thumbnail-scroll="right"></button>'
         "</div>"
         "</div>"
     )

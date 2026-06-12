@@ -841,10 +841,18 @@ h3 {
   border-top: 1px solid var(--line);
 }
 
+.animation-thumbnail-rail {
+  position: relative;
+}
+
 .animation-thumbnails {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 0.65rem;
+}
+
+.animation-thumbnail-scroll {
+  display: none;
 }
 
 .animation-thumb {
@@ -1297,11 +1305,61 @@ pre code {
     overflow-x: auto;
     padding-bottom: 0.25rem;
     scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .animation-thumbnails::-webkit-scrollbar {
+    display: none;
   }
 
   .animation-thumb {
     flex: 0 0 11rem;
     scroll-snap-align: start;
+  }
+
+  .animation-thumbnail-rail.has-overflow .animation-thumbnail-scroll {
+    position: absolute;
+    top: 50%;
+    z-index: 3;
+    display: grid;
+    width: 2.25rem;
+    height: 2.25rem;
+    place-items: center;
+    border: 1px solid rgb(255 255 255 / 50%);
+    border-radius: 50%;
+    background: rgb(30 42 50 / 64%);
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgb(30 42 50 / 18%);
+    transform: translateY(-50%);
+  }
+
+  .animation-thumbnail-scroll::before {
+    display: block;
+    font-size: 1.8rem;
+    line-height: 1;
+  }
+
+  .animation-thumbnail-scroll-left {
+    left: 0.35rem;
+  }
+
+  .animation-thumbnail-scroll-left::before {
+    content: "\2039";
+  }
+
+  .animation-thumbnail-scroll-right {
+    right: 0.35rem;
+  }
+
+  .animation-thumbnail-scroll-right::before {
+    content: "\203A";
+  }
+
+  .animation-thumbnail-rail.is-at-start .animation-thumbnail-scroll-left,
+  .animation-thumbnail-rail.is-at-end .animation-thumbnail-scroll-right {
+    opacity: 0;
+    pointer-events: none;
   }
 
   .doc-toc {

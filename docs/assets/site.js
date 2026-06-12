@@ -227,11 +227,28 @@
       const source = showcase.querySelector("[data-animation-source]");
       const caption = showcase.querySelector("[data-animation-caption]");
       const thumbs = Array.from(showcase.querySelectorAll("[data-video-src]"));
+      const thumbnailRail = showcase.querySelector("[data-thumbnail-rail]");
+      const thumbnailStrip = showcase.querySelector("[data-thumbnail-strip]");
+      const scrollButtons = Array.from(showcase.querySelectorAll("[data-thumbnail-scroll]"));
       if (!player || !source || !caption || !thumbs.length) {
         return;
       }
 
-      function setVideo(button) {
+      function updateThumbnailScrollState() {
+        if (!thumbnailRail || !thumbnailStrip) {
+          return;
+        }
+
+        const hasOverflow = thumbnailStrip.scrollWidth > thumbnailStrip.clientWidth + 1;
+        const isAtStart = thumbnailStrip.scrollLeft <= 1;
+        const isAtEnd =
+          thumbnailStrip.scrollLeft + thumbnailStrip.clientWidth >= thumbnailStrip.scrollWidth - 1;
+        thumbnailRail.classList.toggle("has-overflow", hasOverflow);
+        thumbnailRail.classList.toggle("is-at-start", !hasOverflow || isAtStart);
+        thumbnailRail.classList.toggle("is-at-end", !hasOverflow || isAtEnd);
+      }
+
+      function setVideo(button, shouldPlay) {
         const videoSrc = button.getAttribute("data-video-src");
         const poster = button.getAttribute("data-video-poster");
         const nextCaption = button.getAttribute("data-video-caption") || "";
@@ -246,17 +263,44 @@
         }
         caption.textContent = nextCaption;
         player.load();
+        if (shouldPlay) {
+          const playPromise = player.play();
+          if (playPromise && typeof playPromise.catch === "function") {
+            playPromise.catch(() => {});
+          }
+        }
 
         thumbs.forEach((thumb) => {
           const isActive = thumb === button;
           thumb.classList.toggle("is-active", isActive);
           thumb.setAttribute("aria-current", isActive ? "true" : "false");
         });
+
+        button.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
       }
 
       thumbs.forEach((button) => {
-        button.addEventListener("click", () => setVideo(button));
+        button.addEventListener("click", () => setVideo(button, true));
       });
+
+      if (thumbnailRail && thumbnailStrip) {
+        scrollButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const direction = button.getAttribute("data-thumbnail-scroll") === "left" ? -1 : 1;
+            thumbnailStrip.scrollBy({
+              left: direction * thumbnailStrip.clientWidth * 0.75,
+              behavior: "smooth",
+            });
+          });
+        });
+
+        thumbnailStrip.addEventListener("scroll", updateThumbnailScrollState, { passive: true });
+        window.addEventListener("resize", updateThumbnailScrollState);
+        if ("ResizeObserver" in window) {
+          new ResizeObserver(updateThumbnailScrollState).observe(thumbnailStrip);
+        }
+        requestAnimationFrame(updateThumbnailScrollState);
+      }
     });
   }
 
