@@ -53,6 +53,7 @@ PAGES = [
     Page("part3.md", "part3.html", "Part 3", "Group project"),
     Page("scene_editor.md", "scene_editor.html", "Scene Editor", "Part 3 tool"),
     Page("showcase.md", "showcase.html", "Showcase", "Final session"),
+    Page("class_2026.md", "class-2026.html", "Class 2026", "Student gallery"),
     Page("final_report.md", "final_report.html", "Final Report", "Final submission"),
     Page("faq.md", "faq.html", "FAQ", "Common questions"),
     Page("references.md", "references.html", "References", "Further reading"),
@@ -428,6 +429,110 @@ def reports_overview_embed(_markdown: str = "") -> str:
     )
 
 
+CLASS_2026_PHOTOS = [
+    ("assets/class_2026/photos/group_photo_1.jpg", "GF5 class of 2026 group photo."),
+    ("assets/class_2026/photos/group_photo_2.jpg", "GF5 class of 2026 group photo."),
+]
+
+CLASS_2026_ANIMATIONS = [
+    (
+        "assets/class_2026/videos/elen_sarah.mp4",
+        "assets/class_2026/posters/elen_sarah.jpg",
+        "By Elen & Sarah",
+    ),
+    (
+        "assets/class_2026/videos/kavita_madeleine.mp4",
+        "assets/class_2026/posters/kavita_madeleine.jpg",
+        "By Kavita & Madeleine",
+    ),
+    (
+        "assets/class_2026/videos/frank_yilia.mp4",
+        "assets/class_2026/posters/frank_yilia.jpg",
+        "By Frank & Yilia",
+    ),
+    (
+        "assets/class_2026/videos/sean_zohaib.mp4",
+        "assets/class_2026/posters/sean_zohaib.jpg",
+        "By Sean & Zohaib",
+    ),
+    (
+        "assets/class_2026/videos/donna_stan.mp4",
+        "assets/class_2026/posters/donna_stan.jpg",
+        "By Donna & Stan",
+    ),
+    (
+        "assets/class_2026/videos/rohan_sam.mp4",
+        "assets/class_2026/posters/rohan_sam.jpg",
+        "By Rohan & Sam",
+    ),
+]
+
+
+def class_showcase_embed(_markdown: str = "") -> str:
+    photos = "".join(
+        f'<figure class="class-photo-slide{" is-active" if index == 0 else ""}" '
+        f'data-photo-slide data-photo-index="{index}" '
+        'role="button" tabindex="0" '
+        f'aria-pressed="{"true" if index == 0 else "false"}" '
+        f'aria-label="Show group photo {index + 1}">'
+        f'<img src="{html.escape(rewrite_href(src), quote=True)}" '
+        f'alt="{html.escape(alt, quote=True)}" loading="lazy">'
+        "</figure>"
+        for index, (src, alt) in enumerate(CLASS_2026_PHOTOS)
+    )
+    first_video, first_poster, first_credit = CLASS_2026_ANIMATIONS[0]
+    animation_thumbnails = "".join(
+        f'<button class="animation-thumb{" is-active" if index == 0 else ""}" '
+        'type="button" '
+        f'aria-current="{"true" if index == 0 else "false"}" '
+        f'data-video-src="{html.escape(rewrite_href(src), quote=True)}" '
+        f'data-video-poster="{html.escape(rewrite_href(poster), quote=True)}" '
+        f'data-video-caption="{html.escape(credit, quote=True)}" '
+        f'aria-label="Show animation {html.escape(credit, quote=True)}">'
+        f'<img src="{html.escape(rewrite_href(poster), quote=True)}" '
+        f'alt="{html.escape(credit, quote=True)}" loading="lazy">'
+        "</button>"
+        for index, (src, poster, credit) in enumerate(CLASS_2026_ANIMATIONS)
+    )
+    animation_showcase = (
+        '<div class="animation-carousel" data-animation-showcase>'
+        '<figure class="animation-feature">'
+        '<div class="animation-feature-frame">'
+        f'<video controls preload="metadata" playsinline '
+        f'poster="{html.escape(rewrite_href(first_poster), quote=True)}" '
+        'data-animation-player>'
+        f'<source src="{html.escape(rewrite_href(first_video), quote=True)}" '
+        'type="video/mp4" data-animation-source>'
+        f'<a href="{html.escape(rewrite_href(first_video), quote=True)}">Open video</a>'
+        "</video>"
+        "</div>"
+        f'<figcaption data-animation-caption>{html.escape(first_credit)}</figcaption>'
+        "</figure>"
+        '<div class="animation-thumbnails" aria-label="Select animation">'
+        f"{animation_thumbnails}"
+        "</div>"
+        "</div>"
+    )
+    return (
+        '<section class="class-showcase" aria-label="GF5 class of 2026 showcase">'
+        '<section class="gallery-section class-photos-section" aria-label="Group photos">'
+        '<div class="photo-carousel" data-photo-carousel>'
+        '<div class="photo-stack" data-photo-stack>'
+        f"{photos}"
+        "</div>"
+        "</div>"
+        "</section>"
+        '<section class="gallery-section animation-showcase-section" aria-labelledby="animation-showcase-heading">'
+        '<div class="gallery-section-header">'
+        '<p class="eyebrow">Final work</p>'
+        '<h2 id="animation-showcase-heading">Animation showcase</h2>'
+        "</div>"
+        f"{animation_showcase}"
+        "</section>"
+        "</section>"
+    )
+
+
 def is_table_row(line: str) -> bool:
     stripped = line.strip()
     return stripped.startswith("|") and stripped.endswith("|") and stripped.count("|") >= 2
@@ -516,6 +621,9 @@ class MarkdownRenderer:
                 return
             if mode == "reports-overview":
                 self.out.append(reports_overview_embed(payload))
+                return
+            if mode == "class-showcase":
+                self.out.append(class_showcase_embed(payload))
                 return
             raise SystemExit(f"Unknown site directive: {mode}")
 
@@ -682,11 +790,17 @@ def render_nav(
         return f'          <a href="{html.escape(href, quote=True)}"{class_attr}{aria}>{html.escape(label)}</a>'
 
     overview = PAGES[0]
-    material_pages = PAGES[1:]
+    gallery_pages = [page for page in PAGES if page.output == "class-2026.html"]
+    material_pages = [page for page in PAGES[1:] if page not in gallery_pages]
     material_active = current in material_pages
     material_class = "nav-dropdown is-active" if material_active else "nav-dropdown"
     material_links = "\n".join(
         nav_link(page.nav_label, page.output, page == current) for page in material_pages
+    )
+    gallery_active = current in gallery_pages
+    gallery_class = "nav-dropdown is-active" if gallery_active else "nav-dropdown"
+    gallery_links = "\n".join(
+        nav_link(page.nav_label, page.output, page == current) for page in gallery_pages
     )
     slide_decks = SLIDE_DECKS
     active_slide_output = current_slide_output or (slide_decks[0].output if slide_decks else "")
@@ -708,6 +822,12 @@ def render_nav(
             <button class="nav-dropdown-trigger" type="button" aria-haspopup="true" aria-expanded="false" data-nav-dropdown-trigger>Slides</button>
             <div class="nav-dropdown-menu" data-nav-dropdown-menu>
 {slide_links}
+            </div>
+          </div>""",
+        f"""          <div class="{gallery_class}" data-nav-dropdown>
+            <button class="nav-dropdown-trigger" type="button" aria-haspopup="true" aria-expanded="false" data-nav-dropdown-trigger>Gallery</button>
+            <div class="nav-dropdown-menu" data-nav-dropdown-menu>
+{gallery_links}
             </div>
           </div>""",
         (
@@ -743,8 +863,11 @@ def render_actions(page: Page) -> str:
             <a class="button primary" href="{github_href}" target="_blank" rel="noreferrer">GitHub codebase</a>
             <a class="button" href="setup.html">Start setup</a>
             <a class="button" href="parts12-slides.html">Open slides</a>
+            <a class="button" href="class-2026.html">Gallery</a>
           </div>
 """
+    if page.output == "class-2026.html":
+        return ""
     index = PAGES.index(page)
     actions: list[str] = []
     if index > 0:
@@ -818,7 +941,12 @@ def render_page(
     html_title = SITE_TITLE if title == SITE_TITLE else f"{title} | {SITE_TITLE}"
     release_summary = render_release_summary() if page.output == "index.html" else ""
     toc = render_toc(doc)
-    article_class = "doc-content faq-content" if page.output == "faq.html" else "doc-content"
+    article_classes = ["doc-content"]
+    if page.output == "faq.html":
+        article_classes.append("faq-content")
+    if page.output == "class-2026.html":
+        article_classes.append("gallery-content")
+    article_class = " ".join(article_classes)
     if source_base_url:
         source_href = f"{source_base_url.rstrip('/')}/{page.source}"
     elif source_relative_base and source_relative_base != ".":

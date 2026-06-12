@@ -126,6 +126,7 @@ to the Part 3 composition tool.
 | Final animation results | Friday 12 June 2026 (4pm) | 15 | Group |
 
 See [Part 3 Showcase](showcase.md) for the format and timing.
+Selected finished examples are available in the [Class of 2026 gallery](class_2026.md).
 
 ## Slides
 
