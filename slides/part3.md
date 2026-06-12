@@ -482,7 +482,7 @@ Tips, tricks, surprises, and useful failures are welcome.
 | `2` | Madeleine & Kavita | `7` | Yilia & Frank |
 | `3` | Rohan & Sam | `8` | Tianze & Yunge |
 | `4` | Serene & Aaron | `9` | Donna & Stan |
-| `5` | Zohalb & Sean |  |  |
+| `5` | Zohaib & Sean |  |  |
 
 ???
 Use this as the confirmed showcase presentation order.
